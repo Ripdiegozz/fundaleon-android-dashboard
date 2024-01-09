@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Session } from '@supabase/supabase-js'
-import { supabase } from '../../../lib/supabase'
+import { supabase } from '../../lib/supabase'
 import { View } from 'react-native'
-import Auth from '../../(auth)/sign-up'
-import Account from '../../../components/account/account-view'
+import Auth from '../(auth)/sign-up'
+import Account from '../../components/account/account-view'
 
 const AccountPage = () => {
   const [session, setSession] = useState<Session | null>(null)

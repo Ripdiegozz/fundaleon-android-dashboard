@@ -27,10 +27,10 @@ import {
   LibraryBig 
 } from 'lucide-react-native'
 import { router, Stack } from 'expo-router'
-import { WrongSetupDialog } from '../../../components/modals/wrong-set-up-modal'
-import { makeRequest } from '../../../lib/axios'
-import { useAuth } from '../../../context/authStore'
-import { useFindUser } from '../../../hooks/use-find-user'
+import { WrongSetupDialog } from '../../components/modals/wrong-set-up-modal'
+import { makeRequest } from '../../lib/axios'
+import { useAuth } from '../../context/authStore'
+import { useFindUser } from '../../hooks/use-find-user'
 import * as z from 'zod'
 
 const schema = z.object({
@@ -50,8 +50,8 @@ interface FormValues {
 }
 
 export default function SetUpPage() {
-  const { session } = useAuth()
   const { user } = useFindUser()
+  const { session } = useAuth()
 
   const [sessionNow, setSessionNow] = useState(false)
   const [showAlertDialog, setShowAlertDialog] = useState(false)
@@ -131,7 +131,7 @@ export default function SetUpPage() {
     }  
   }
 
-  if (user.id) {
+  if (user) {
     return router.push('/dashboard')
   }
 

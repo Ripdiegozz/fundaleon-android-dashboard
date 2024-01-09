@@ -17,7 +17,7 @@ export const DashboardHeader = () => {
 
             <Box
                 paddingTop={"$2"}
-                paddingRight={"$7"}
+                paddingRight={"$4"}
             >
                 <AvatarComponent />
             </Box>

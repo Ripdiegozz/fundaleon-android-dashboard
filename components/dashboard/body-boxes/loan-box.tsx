@@ -1,37 +1,53 @@
 import React, { useEffect, useState } from 'react'
-import { makeRequest } from '../../../lib/axios'
-import { Text, Box, Icon } from '@gluestack-ui/themed'
-import { ChevronDownIcon } from 'lucide-react-native'
+import { ProgressChart } from 'react-native-chart-kit'
+import { Text, Box, Icon, Badge, BadgeText } from '@gluestack-ui/themed'
+import { ChevronUpIcon } from 'lucide-react-native'
+// import { makeRequest } from '../../../lib/axios'
+
+const data = {
+  labels: ["Swim"], // optional
+  data: [0.8]
+};
+
+const chartConfig = {
+  backgroundGradientFrom: "#fff",
+  backgroundGradientFromOpacity: 0,
+  backgroundGradientTo: "#fff",
+  backgroundGradientToOpacity: 0.5,
+  color: (opacity = 1) => `rgba(60, 80, 224, ${opacity})`,
+  strokeWidth: 2, // optional, default 3
+  barPercentage: 0.5,
+  useShadowColorFromDataset: false // optional
+};
 
 export const LoanBox = () => {
-  const [books, setBooks] = useState(0)
-
-  useEffect(() => {
-    //TODO: Change for a react query hook tomorrow
-    const getBooks = async () => {
-      const { data } = await makeRequest.get('/book/get/all')
-      // count the object keys
-      const count = Object.keys(data.data).length
-      setBooks(count)
-    }
-
-    getBooks()
-  }, [])
-
   return (
-    <Box width='$48' height='$1/5' paddingBottom='$2' bgColor='$secondary50' display='flex' justifyContent='flex-start' alignItems='flex-start' padding='$4'>
+    <Box width='$full' paddingBottom='$2' bgColor='$white' display='flex' justifyContent='flex-start' alignItems='flex-start' padding='$4' borderRadius='$lg'>
         <Box display='flex' flexDirection='row' rowGap='$1' alignItems='center'>
+          <Text fontSize='$4xl' paddingTop='$6' fontWeight='$regular' textAlign='center'>120</Text>
+        </Box>
+        <Box display='flex' width='$full' flexDirection='row' justifyContent='flex-start' alignItems='center'>
           <Box>
             <Box display='flex' flexDirection='row' rowGap='$1' alignItems='center'>
-              <Text fontSize='$md' fontWeight='$medium'>Préstamos iniciados</Text>
-              <Icon as={ChevronDownIcon} size='md' color='$red' marginLeft='$2' />
+              <Text fontSize='$lg' fontWeight='$medium'>Préstamos iniciados</Text>
+              <Icon as={ChevronUpIcon} size='md' color='$green' marginLeft='$2' />
             </Box>
-            <Text fontSize='$sm' fontWeight='$regular'>Este mes.</Text>
+            <Box display='flex' flexDirection='row' rowGap='$1' alignItems='center'>
+              <Text fontSize='$md' fontWeight='$regular'>Este mes.</Text>
+              <Badge size="md" variant="solid" borderRadius="$none" action="success" marginLeft="$2">
+                <BadgeText fontSize='$md' fontWeight='$regular'>+ %15</BadgeText>
+              </Badge>
+            </Box>
           </Box>
-        </Box>
-        
-        <Box width='$full' height='$full' display='flex' flexDirection='column' justifyContent='flex-start' alignItems='center'>
-          <Text fontSize='$6xl' paddingTop='$16' fontWeight='$regular' textAlign='center'>{books}</Text>
+          <ProgressChart
+            data={data}
+            width={200}
+            height={140}
+            strokeWidth={16}
+            radius={32}
+            chartConfig={chartConfig}
+            hideLegend={true}
+          />
         </Box>
     </Box>
   )

@@ -1,14 +1,15 @@
 import React from 'react';
-import { DashboardHeader } from '../../../components/dashboard/header';
-import { DashboardBody } from '../../../components/dashboard/body';
-import { useFindUser } from '../../../hooks/use-find-user';
-import { Box, Text } from '@gluestack-ui/themed';
+import { router } from 'expo-router';
+import { Box, Text, ScrollView } from '@gluestack-ui/themed';
+import { DashboardHeader } from '../../components/dashboard/header';
+import { DashboardBody } from '../../components/dashboard/body';
+import { useFindUser } from '../../hooks/use-find-user';
 
 const Dashboard = () => {
   const { user, loading } = useFindUser();
   
   return (
-      <Box>
+      <ScrollView marginTop="$12">
           <DashboardHeader />
           {/* <ActionSheet /> */}
           {
@@ -21,7 +22,7 @@ const Dashboard = () => {
                 <Text 
                   fontSize="$2xl" 
                   paddingTop="$6" 
-                  paddingLeft="$4" 
+                  paddingLeft="$4"
                   fontWeight='$medium'
                 >
                   Bienvenido/a, {user?.fullName.split(' ')[0]}
@@ -31,7 +32,7 @@ const Dashboard = () => {
             )
           }
           <DashboardBody />
-      </Box>
+      </ScrollView>
   );
 };
 

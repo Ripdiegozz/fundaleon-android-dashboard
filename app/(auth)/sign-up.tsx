@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Stack, router } from 'expo-router'
 import {
   FormControl,
   FormControlLabel,
@@ -25,10 +26,9 @@ import {
   LockIcon,
   LibraryBig 
 } from 'lucide-react-native'
-import { WrongCredentialsDialog } from '../../../components/modals/wrong-credentials-modal'
-import { Stack } from 'expo-router'
-import { useAuth } from '../../../context/authStore'
-import { router } from 'expo-router'
+import { WrongCredentialsDialog } from '../../components/modals/wrong-credentials-modal'
+import { useAuth } from '../../context/authStore'
+import { useFindUser } from '../../hooks/use-find-user'
 
 interface FormValues {
   email: string
@@ -57,8 +57,8 @@ export default function Auth() {
     setLoading(true)
     login(formValues.email, formValues.password).then(() => {
       setLoading(false)
-      router.push('/set-up')
-    }).catch((err) => {
+      router.push('/dashboard')
+    }).catch(() => {
       // Show error modal
       setLoading(false)
       setShowAlertDialog(true)

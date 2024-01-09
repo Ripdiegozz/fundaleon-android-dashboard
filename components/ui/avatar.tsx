@@ -30,8 +30,8 @@ export const AvatarComponent = () => {
         <>
             <VStack space="2xl">
               <HStack space="md">
-                <Button onPress={handleClose} bgColor="$white">
-                    <Avatar size="md" bgColor="$pink300" borderColor="$rose600" borderWidth={2}>
+                <Button onPress={handleClose} bgColor="$backgroundLight100">
+                    <Avatar size="md" bgColor="$white" borderColor="$rose100" borderWidth={2}>
                       {/* User is imported from 'lucide-react-native' */}
                       <Icon as={User} color="$indigo600" size="xl"/>
                     </Avatar>
