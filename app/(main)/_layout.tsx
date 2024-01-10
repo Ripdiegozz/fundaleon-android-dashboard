@@ -18,7 +18,7 @@ export default () => {
                     }}
                 />
                 <Tabs.Screen 
-                    name="books/book-list" 
+                    name="books"
                     options={{
                         href: "books/book-list",
                         headerShown: false,
@@ -26,36 +26,6 @@ export default () => {
                         tabBarIcon: ({ color, size }) => (
                             <BookIcon size={size} color={color} />
                         ),
-                    }}
-                />
-
-                {/* Hide some books routes */}
-                <Tabs.Screen
-                    name="books/book-edit"
-                    options={{
-                        href: null,
-                        headerShown: false,
-                    }}
-                />
-                <Tabs.Screen
-                    name="books/book-add"
-                    options={{
-                        href: null,
-                        headerShown: false,
-                    }}
-                />
-                <Tabs.Screen
-                    name="books/book-view"
-                    options={{
-                        href: null,
-                        headerShown: false,
-                    }}
-                />
-                <Tabs.Screen
-                    name="books/book-delete"
-                    options={{
-                        href: null,
-                        headerShown: false,
                     }}
                 />
             </Tabs>

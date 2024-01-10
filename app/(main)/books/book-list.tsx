@@ -1,10 +1,13 @@
-import { View, Text } from 'react-native'
+import { Box, Text, ScrollView } from '@gluestack-ui/themed'
 import React from 'react'
+import { DashboardHeader } from '../../../components/book-management/header'
+import { DashboardBody } from '../../../components/book-management/body'
 
 export default function BookDashboard() {
   return (
-    <View>
-      <Text>index</Text>
-    </View>
+    <ScrollView marginTop="$12">
+      <DashboardHeader title="Inventario" />
+      <DashboardBody />
+    </ScrollView>
   )
 }

@@ -10,7 +10,7 @@ const Dashboard = () => {
   
   return (
       <ScrollView marginTop="$12">
-          <DashboardHeader />
+          <DashboardHeader title="Dashboard" />
           {/* <ActionSheet /> */}
           {
             loading ? (
