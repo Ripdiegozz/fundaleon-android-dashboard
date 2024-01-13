@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { DataTable } from 'react-native-paper';
+import { Skeleton } from '@rneui/themed'
 import { Text, Box, Icon, Badge, BadgeText, Button, Input, InputField, FormControl } from '@gluestack-ui/themed'
 import { EyeIcon } from 'lucide-react-native'
 import { router } from 'expo-router';
@@ -135,6 +136,14 @@ export const BooksTable = () => {
             ]
           })
         }
+
+        // order alphabetically asc
+        dataArr.sort((a, b) => {
+          if (a.title < b.title) return -1
+          if (a.title > b.title) return 1
+          return 0
+        })
+
         setItems(dataArr)
         setOriginalItems(dataArr)
       } catch (error) {
@@ -180,45 +189,51 @@ export const BooksTable = () => {
               />
             </Input>
           </FormControl>
-          <Badge marginLeft='$4' paddingVertical='$2' paddingHorizontal='$3'>
+          <Badge marginLeft='$4' paddingVertical='$2' paddingHorizontal='$5'>
             <BadgeText>{items.length}</BadgeText>
           </Badge>
         </Box>
       </Box>
 
-      <DataTable>
-        <DataTable.Header>
-          <DataTable.Title>Libro</DataTable.Title>
-          <DataTable.Title numeric>Detalles</DataTable.Title>
-        </DataTable.Header>
+      {
+        items
+        ? (
+          <DataTable>
+              <DataTable.Header>
+                <DataTable.Title>Libro</DataTable.Title>
+                <DataTable.Title numeric>Detalles</DataTable.Title>
+              </DataTable.Header>
 
-        {items.slice(from, to).map((item) => (
-          <DataTable.Row key={item.id}>
-            <DataTable.Cell style={{}}>{item.title}</DataTable.Cell>
-            <DataTable.Cell numeric>
-              {item.actions.map((action, i) => (
-                <Button key={i} paddingHorizontal='$2' paddingVertical='$1' marginHorizontal='$1' marginVertical='$1' bgColor='$white' onPress={
-                  () => router.push(`/book-view/${item.isbn}`)
-                }>
-                    <Icon as={EyeIcon} size='md' color='$amber600' />
-                </Button>
+              {items.slice(from, to).map((item) => (
+                <DataTable.Row key={item.id}>
+                  <DataTable.Cell style={{}}>{item.title}</DataTable.Cell>
+                  <DataTable.Cell numeric>
+                    {item.actions.map((action, i) => (
+                      <Button key={i} paddingHorizontal='$2' paddingVertical='$1' marginHorizontal='$1' marginVertical='$1' bgColor='$white' onPress={
+                        () => router.push(`/books/details/${item.id}`)
+                      }>
+                          <Icon as={EyeIcon} size='md' color='$blue500' />
+                      </Button>
+                    ))}
+                  </DataTable.Cell>
+                </DataTable.Row>
               ))}
-            </DataTable.Cell>
-          </DataTable.Row>
-        ))}
 
-        <DataTable.Pagination
-          page={page}
-          numberOfPages={Math.ceil(items.length / itemsPerPage)}
-          onPageChange={(page) => setPage(page)}
-          label={`${from + 1}-${to} of ${items.length}`}
-          numberOfItemsPerPageList={numberOfItemsPerPageList}
-          numberOfItemsPerPage={itemsPerPage}
-          onItemsPerPageChange={onItemsPerPageChange}
-          showFastPaginationControls
-          selectPageDropdownLabel={'Rows per page'}
-        />
-      </DataTable>
+              <DataTable.Pagination
+                page={page}
+                numberOfPages={Math.ceil(items.length / itemsPerPage)}
+                onPageChange={(page) => setPage(page)}
+                label={`${from + 1}-${to} of ${items.length}`}
+                numberOfItemsPerPageList={numberOfItemsPerPageList}
+                numberOfItemsPerPage={itemsPerPage}
+                onItemsPerPageChange={onItemsPerPageChange}
+                showFastPaginationControls
+                selectPageDropdownLabel={'Rows per page'}
+              />
+            </DataTable>
+        )
+        : <Skeleton height={300} />
+      }
     </Box>
   )
 }

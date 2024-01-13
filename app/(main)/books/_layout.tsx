@@ -1,51 +1,120 @@
-import { Tabs } from "expo-router"
-import { BookIcon, LayoutDashboardIcon } from "lucide-react-native"
+import { Stack, router } from 'expo-router';
+import { Icon, Text, Button, Box } from '@gluestack-ui/themed';
+import { BookIcon, LayoutDashboardIcon, HomeIcon, FileEditIcon, EyeIcon, TrashIcon, PlusCircleIcon, ChevronLeft } from "lucide-react-native"
 
 export default () => {
     return (
         <>
-            <Tabs>
+            <Stack>
                 {/* Show functional routes */}
-                <Tabs.Screen 
+                <Stack.Screen
                     name="book-list" 
                     options={{
-                        href: "/book-list",
-                        headerShown: false,
-                        tabBarLabel: "Inventario",
-                        tabBarIcon: ({ color, size }) => (
-                            <LayoutDashboardIcon size={size} color={color} />
-                        ),
+                        headerTitle: 'Inicio',
+                        headerLeft: () => <Icon as={HomeIcon} size='lg' color='$black' paddingHorizontal='$6' />,
                     }}
                 />
-                <Tabs.Screen
-                    name="book-edit"
+                <Stack.Screen
+                    name="edit/[bookId]"
                     options={{
-                        href: null,
-                        headerShown: false,
+                        headerTitle: 'Editar Libro',
+                        headerLeft: () => <Icon as={FileEditIcon} size='lg' color='$black' paddingHorizontal='$6' />,
+                        headerRight: () => (
+                            <Button
+                                display='flex'
+                                flexDirection='row'
+                                gap='$1'
+                                padding='$0'
+                                margin='$0'
+                                alignItems='center'
+                                variant='outline'
+                                onPress={
+                                    () => router.push('/books/book-list')
+                                }
+                            >
+                                <Text fontWeight='bold'>Volver</Text>
+                            </Button>
+                        )
                     }}
                 />
-                <Tabs.Screen
+                <Stack.Screen
                     name="book-add"
                     options={{
-                        href: null,
-                        headerShown: false,
+                        headerTitle: 'Agregar Libro',
+                        headerLeft: () => <Icon as={PlusCircleIcon} size='lg' color='$black' paddingHorizontal='$6' />,
+                        headerRight: () => (
+                            <Button
+                                display='flex'
+                                flexDirection='row'
+                                gap='$1'
+                                padding='$0'
+                                margin='$0'
+                                alignItems='center'
+                                variant='outline'
+                                onPress={
+                                    () => router.push('/books/book-list')
+                                }
+                            >
+                                <Text fontWeight='bold'>Volver</Text>
+                            </Button>
+                        )
                     }}
                 />
-                <Tabs.Screen
-                    name="book-delete"
-                    options={{
-                        href: null,
-                        headerShown: false,
-                    }}
-                />
-                <Tabs.Screen
+                <Stack.Screen
                     name="details/[bookId]"
                     options={{
-                        href: null,
-                        headerShown: false,
+                        headerTitle: () => (
+                            <Box display='flex' flexDirection='row' gap='$2'>
+                                <Icon as={BookIcon} size='lg' color='$black' />
+                                <Text fontSize='$xl' fontWeight='bold'>Detalles de Libro</Text>
+                            </Box>
+                        ),
+                        headerRight: () => (
+                            <Button
+                                display='flex'
+                                flexDirection='row'
+                                gap='$1'
+                                padding='$0'
+                                margin='$0'
+                                alignItems='center'
+                                variant='outline'
+                                onPress={
+                                    () => router.push('/books/book-list')
+                                }
+                            >
+                                <Text fontWeight='bold'>Volver</Text>
+                            </Button>
+                        )
                     }}
                 />
-            </Tabs>
+                <Stack.Screen
+                    name="delete/[bookId]"
+                    options={{
+                        headerTitle: () => (
+                            <Box display='flex' flexDirection='row' gap='$2'>
+                                <Icon as={TrashIcon} size='lg' color='$black' />
+                                <Text fontSize='$xl' fontWeight='bold'>Eliimnar Libro</Text>
+                            </Box>
+                        ),
+                        headerRight: () => (
+                            <Button
+                                display='flex'
+                                flexDirection='row'
+                                gap='$1'
+                                padding='$0'
+                                margin='$0'
+                                alignItems='center'
+                                variant='outline'
+                                onPress={
+                                    () => router.push('/books/book-list')
+                                }
+                            >
+                                <Text fontWeight='bold'>Volver</Text>
+                            </Button>
+                        )
+                    }}
+                />
+            </Stack>
         </>     
     )
 }

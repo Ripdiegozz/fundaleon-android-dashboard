@@ -5,7 +5,7 @@ import { DashboardBody } from '../../../components/book-management/body'
 
 export default function BookDashboard() {
   return (
-    <ScrollView marginTop="$12">
+    <ScrollView paddingTop="$5">
       <DashboardHeader title="Inventario" />
       <DashboardBody />
     </ScrollView>

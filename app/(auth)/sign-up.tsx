@@ -90,7 +90,7 @@ export default function Auth() {
         {/* MOCK LOGO BOX */}
         <Box
           position="absolute"
-          top="$12"
+          top="$16"
           left="$8"
           width="$12"
           height="$12"

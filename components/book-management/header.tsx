@@ -8,7 +8,7 @@ export const DashboardHeader = ({ title } : {title : string}) => {
         >
             <Text 
                 fontSize={"$4xl"} 
-                paddingTop={"$7"} 
+                paddingTop={"$6"}
                 paddingLeft={"$4"} 
                 fontWeight="$semibold"
             >
@@ -16,7 +16,7 @@ export const DashboardHeader = ({ title } : {title : string}) => {
             </Text>
 
             <Box
-                paddingTop={"$2"}
+                paddingTop={"$1"}
                 paddingRight={"$4"}
             >
                 <AvatarComponent />

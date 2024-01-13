@@ -11,6 +11,7 @@ import {
   ButtonText
 } from '@gluestack-ui/themed'
 import { makeRequest } from '../../../../lib/axios'
+import { ConfirmDeleteBookModal } from '../../../../components/modals/confirm-delete-book-modal'
 import { Skeleton } from '@rneui/themed'
 import { router } from 'expo-router'
 
@@ -30,6 +31,7 @@ interface BookProps {
 export default function BookDetailsView() {
   const params = useLocalSearchParams()
   const [book, setBook] = useState<BookProps | null>(null)
+  const [showAlertDialog, setShowAlertDialog] = useState(false)
   const [booksFromSameAuthor, setBooksFromSameAuthor] = useState<BookProps[] | null>(null)
 
   useEffect(() => {
@@ -107,11 +109,9 @@ export default function BookDetailsView() {
 
   return (
     <ScrollView padding='$10' paddingTop='$8' bgColor='$white'>
+      <Text fontSize='$4xl' fontWeight='bold' paddingBottom='$2' paddingTop='$0' lineHeight='$4xl'>Eliminar libro: {book?.title || 'Cargando...'}</Text>
       {/* Book title and author */}
-      <Box>
-        <Text fontWeight='bold' fontSize='$5xl' paddingTop='$5' paddingBottom='$1' lineHeight='$4xl'>{book?.title || 'Cargando...'}</Text>
-        <Text fontSize='$xl' fontWeight='semibold' paddingTop='$2'>{book?.author || 'Cargando...'}</Text>
-      </Box>
+      <Text fontSize='$xl' fontWeight='semibold' paddingTop='$2'>{book?.author || 'Cargando...'}</Text>
       {/* Book Properties */}
       <Box paddingTop='$3'>
         <Box display='flex' flexDirection='row' alignItems='center' gap='$2'>
@@ -182,19 +182,20 @@ export default function BookDetailsView() {
       <ButtonGroup space="sm" paddingTop='$8' width='$full' display='flex' justifyContent='flex-end'>
         <Button
         variant="solid"
-        action="negative"
-        onPress={() => router.push(`/books/delete/${book?.id}`)}
+        action="primary"
+        onPress={() => router.push(`/books/book-list`)}
         >
-          <ButtonText>Eliminar</ButtonText>
+          <ButtonText>Cancelar</ButtonText>
         </Button>
         <Button
         variant="solid"
-        action="primary"
-        onPress={() => router.push(`/books/edit/${book?.id}`)}
+        action="negative"
+        onPress={() => setShowAlertDialog(true)}
         >
-          <ButtonText>Editar</ButtonText>
+          <ButtonText>Confirmar</ButtonText>
         </Button>
       </ButtonGroup>
+      <ConfirmDeleteBookModal data={book} setShowAlertDialog={setShowAlertDialog} showAlertDialog={showAlertDialog} />
     </ScrollView>
   )
 }

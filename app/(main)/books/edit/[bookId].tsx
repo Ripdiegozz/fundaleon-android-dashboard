@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
-import {
+import React, { useState, useEffect } from 'react'
+import { useLocalSearchParams } from 'expo-router/src/hooks'
+import { 
     Box,
     ScrollView,
     FormControl,
@@ -21,7 +22,7 @@ import {
 } from '@gluestack-ui/themed'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Skeleton } from '@rneui/themed'
-import { makeRequest } from '../../../lib/axios'
+import { makeRequest } from '../../../../lib/axios'
 import { CalendarIcon } from 'lucide-react-native';
 import { router } from 'expo-router';
 
@@ -35,27 +36,33 @@ interface BookProps {
   publisher: string;
   quantity: number;
   createdAt: string;
-  updatedAt: string | null;
+  updatedAt: string;
 }
 
 export default function BookEditView() {
   const toast = useToast()
+  const params = useLocalSearchParams()
   const [isLoading, setIsLoading] = useState(false)
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
-  const [book, setBook] = useState<BookProps | null>({
-    id: '',
-    title: '',
-    author: '',
-    genre: '',
-    isbn: '',
-    publication_year: '',
-    publisher: '',
-    quantity: 0,
-    createdAt: '',
-    updatedAt: '',
-  })
+  const [book, setBook] = useState<BookProps | null>(null)
+  const [bookToEdit, setBookToEdit] = useState<BookProps | null>(null)
+
+  useEffect(() => {
+    try {
+      const getBook = async () => {
+        const response = await makeRequest(`/book/get/${params?.bookId}`)
+        const book : BookProps = response.data.data as BookProps
+        setDate(book?.publication_year ? new Date(book.publication_year) : new Date())
+        setBook(book)
+        setBookToEdit(book)
+      }
+      getBook()
+    } catch (error) {
+      console.log(error)
+    }
+  }, [params?.bookId])
 
   const onChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate;
@@ -74,15 +81,14 @@ export default function BookEditView() {
 
   const onSubmit = async () => {
     setIsLoading(true)
-
-    const newBook = book as BookProps
-    newBook.publication_year = date.toLocaleDateString()
-    newBook.createdAt = new Date().toISOString()
-    newBook.updatedAt = null
+    
+    const newBook = bookToEdit as BookProps
+    newBook.publication_year = date.toISOString().slice(0, 10)
+    newBook.updatedAt = new Date().toLocaleDateString()
     console.log(newBook)
 
     try {
-      const response = await makeRequest.post(`/book/add`, newBook)
+      await makeRequest.put(`/book/edit`, newBook)
       toast.show({
         placement: "top",
         render: ({ id }) => {
@@ -90,9 +96,9 @@ export default function BookEditView() {
           return (
             <Toast nativeID={toastId} action="success" variant="solid" marginTop='$10'>
               <VStack space="xs">
-                <ToastTitle>Libro Agregado</ToastTitle>
+                <ToastTitle>Libro Editado</ToastTitle>
                 <ToastDescription>
-                  El libro ha sido agregado a la base de datos correctamente.
+                  El libro ha sido editado correctamente.
                 </ToastDescription>
               </VStack>
             </Toast>
@@ -113,31 +119,72 @@ export default function BookEditView() {
               <VStack space="xs">
                 <ToastTitle>Error</ToastTitle>
                 <ToastDescription>
-                  Ha ocurrido un error al agregar el libro.
+                  Ha ocurrido un error al editar el libro.
                 </ToastDescription>
               </VStack>
             </Toast>
           )
         },
       })
-    } finally {
-      setIsLoading(false)
     }
+  }
+
+  if (!book) {
+    return (
+      <ScrollView padding='$10' paddingTop='$6' bgColor='$white'>
+        <Box>
+          <Skeleton height={40} />
+          <Skeleton height={20} />
+        </Box>
+
+        <Box paddingTop='$4'>
+          <Box display='flex' flexDirection='column' alignItems='center' gap='$4'>
+            <Skeleton height={20} />
+            <Skeleton height={20} />
+          </Box>
+          <Box display='flex' flexDirection='column' alignItems='center' gap='$4'>
+            <Skeleton height={20} />
+            <Skeleton height={20} />
+          </Box>
+          <Box display='flex' flexDirection='column' alignItems='center' gap='$4'>
+            <Skeleton height={20} />
+            <Skeleton height={20} />
+          </Box>
+          <Box display='flex' flexDirection='column' alignItems='center' gap='$4'>
+            <Skeleton height={20} />
+            <Skeleton height={20} />
+          </Box>
+          <Box display='flex' flexDirection='column' alignItems='center' gap='$4'>
+            <Skeleton height={20} />
+            <Skeleton height={20} />
+          </Box>
+          <Box display='flex' flexDirection='column' alignItems='center' gap='$4'>
+            <Skeleton height={20} />
+            <Skeleton height={20} />
+          </Box>
+        </Box>
+
+        <Box paddingTop='$6' paddingBottom='$0' display='flex' flexDirection='column' alignItems='center' gap='$4'>
+          <Skeleton height={20} />
+          <Skeleton height={20} />
+        </Box>
+      </ScrollView>
+    )
   }
 
   return (
     <ScrollView padding='$10' paddingTop='$4' bgColor='$white' display='flex' flexDirection='column' gap='$4'>
-        <Heading size='lg'>Agregando un libro</Heading>
+        <Heading size='lg'>Editando {book.title}</Heading>
         {/* Book title and author */}
         <FormControl isDisabled={isLoading} paddingTop='$2'>
             <FormControlLabel>
             <FormControlLabelText>Título</FormControlLabelText>
             </FormControlLabel>
             <Input>
-            <InputField onChangeText={(text) => {
-              const newBook = book as BookProps
+            <InputField placeholder={book.title} onChangeText={(text) => {
+              const newBook = bookToEdit as BookProps
               newBook.title = text
-              setBook(newBook)
+              setBookToEdit(newBook)
             }}/>
             </Input>
         </FormControl>
@@ -147,10 +194,10 @@ export default function BookEditView() {
             <FormControlLabelText>Autor</FormControlLabelText>
             </FormControlLabel>
             <Input>
-            <InputField onChangeText={(text) => {
-              const newBook = book as BookProps
+            <InputField placeholder={book.author} onChangeText={(text) => {
+              const newBook = bookToEdit as BookProps
               newBook.author = text
-              setBook(newBook)
+              setBookToEdit(newBook)
             }} />
             </Input>
         </FormControl>
@@ -160,13 +207,13 @@ export default function BookEditView() {
             <FormControlLabelText>Género</FormControlLabelText>
             </FormControlLabel>
             <Input>
-            <InputField onChangeText={(text) => {
-              const newBook = book as BookProps
+            <InputField placeholder={book.genre} onChangeText={(text) => {
+              const newBook = bookToEdit as BookProps
               newBook.genre = text
-              setBook(newBook)
+              setBookToEdit(newBook)
             }} />
             </Input>
-        </FormControl>
+        </FormControl> 
         <Box paddingTop='$2'>
           <Text fontWeight='$semibold' color='$backgroundLight800'>Fecha de Publicación</Text>
           <Button onPress={showDatepicker} variant='outline' gap='$2' marginVertical='$2'>
@@ -190,10 +237,10 @@ export default function BookEditView() {
             <FormControlLabelText>Editorial</FormControlLabelText>
             </FormControlLabel>
             <Input>
-            <InputField onChangeText={(text) => {
-              const newBook = book as BookProps
+            <InputField placeholder={book.publisher}  onChangeText={(text) => {
+              const newBook = bookToEdit as BookProps
               newBook.publisher = text
-              setBook(newBook)
+              setBookToEdit(newBook)
             }} />
             </Input>
         </FormControl>
@@ -202,10 +249,10 @@ export default function BookEditView() {
             <FormControlLabelText>Cantidad</FormControlLabelText>
             </FormControlLabel>
             <Input>
-            <InputField onChangeText={(text) => {
-              const newBook = book as BookProps
+            <InputField placeholder={`${book.quantity}`} onChangeText={(text) => {
+              const newBook = bookToEdit as BookProps
               newBook.quantity = parseInt(text)
-              setBook(newBook)
+              setBookToEdit(newBook)
             }} />
             </Input>
         </FormControl>
@@ -215,10 +262,10 @@ export default function BookEditView() {
             <FormControlLabelText>ISBN</FormControlLabelText>
             </FormControlLabel>
             <Input>
-            <InputField onChangeText={(text) => {
-              const newBook = book as BookProps
+            <InputField placeholder={book.isbn} onChangeText={(text) => {
+              const newBook = bookToEdit as BookProps
               newBook.isbn = text
-              setBook(newBook)
+              setBookToEdit(newBook)
             }} />
             </Input>
         </FormControl>
@@ -238,7 +285,7 @@ export default function BookEditView() {
             onPress={onSubmit}
             disabled={isLoading}
             >
-              <ButtonText>Añadir</ButtonText>
+              <ButtonText>Editar</ButtonText>
             </Button>
         </ButtonGroup>
     </ScrollView>
