@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type ModalType = "wrongCredentials" | "wrongSetUp" | "searchBook" | "editBook" | "deleteBook";
+export type ModalType = "wrongCredentials" | "wrongSetUp" | "searchBook" | "editBook" | "deleteBook" | "searchCustomer" | "editCustomer" | "deleteCustomer";
 
 interface ModalStore {
     type: ModalType | null;

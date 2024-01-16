@@ -8,16 +8,16 @@ export default () => {
             <Stack>
                 {/* Show functional routes */}
                 <Stack.Screen
-                    name="book-list" 
+                    name="customer-list" 
                     options={{
                         headerTitle: 'Inicio',
                         headerLeft: () => <Icon as={HomeIcon} size='lg' color='$black' paddingHorizontal='$6' />,
                     }}
                 />
                 <Stack.Screen
-                    name="edit/[bookId]"
+                    name="edit/[customerId]"
                     options={{
-                        headerTitle: 'Editar Libro',
+                        headerTitle: 'Editar Cliente',
                         headerLeft: () => <Icon as={FileEditIcon} size='lg' color='$black' paddingHorizontal='$6' />,
                         headerRight: () => (
                             <Button
@@ -29,7 +29,7 @@ export default () => {
                                 alignItems='center'
                                 variant='outline'
                                 onPress={
-                                    () => router.push('/books/book-list')
+                                    () => router.push('/customers/customer-list')
                                 }
                             >
                                 <Text fontWeight='bold'>Volver</Text>
@@ -38,9 +38,9 @@ export default () => {
                     }}
                 />
                 <Stack.Screen
-                    name="book-add"
+                    name="customer-add"
                     options={{
-                        headerTitle: 'Agregar Libro',
+                        headerTitle: 'Agregar Cliente',
                         headerLeft: () => <Icon as={PlusCircleIcon} size='lg' color='$black' paddingHorizontal='$6' />,
                         headerRight: () => (
                             <Button
@@ -52,7 +52,7 @@ export default () => {
                                 alignItems='center'
                                 variant='outline'
                                 onPress={
-                                    () => router.push('/books/book-list')
+                                    () => router.push('/customers/customer-list')
                                 }
                             >
                                 <Text fontWeight='bold'>Volver</Text>
@@ -61,12 +61,12 @@ export default () => {
                     }}
                 />
                 <Stack.Screen
-                    name="details/[bookId]"
+                    name="details/[customerId]"
                     options={{
                         headerTitle: () => (
                             <Box display='flex' flexDirection='row' gap='$2'>
                                 <Icon as={BookIcon} size='lg' color='$black' />
-                                <Text fontSize='$xl' fontWeight='bold'>Detalles de Libro</Text>
+                                <Text fontSize='$xl' fontWeight='bold'>Detalles de Cliente</Text>
                             </Box>
                         ),
                         headerRight: () => (
@@ -79,7 +79,7 @@ export default () => {
                                 alignItems='center'
                                 variant='outline'
                                 onPress={
-                                    () => router.push('/books/book-list')
+                                    () => router.push('/customers/customer-list')
                                 }
                             >
                                 <Text fontWeight='bold'>Volver</Text>
@@ -88,12 +88,12 @@ export default () => {
                     }}
                 />
                 <Stack.Screen
-                    name="delete/[bookId]"
+                    name="delete/[customerId]"
                     options={{
                         headerTitle: () => (
                             <Box display='flex' flexDirection='row' gap='$2'>
                                 <Icon as={TrashIcon} size='lg' color='$black' />
-                                <Text fontSize='$xl' fontWeight='bold'>Eliminar Libro</Text>
+                                <Text fontSize='$xl' fontWeight='bold'>Eliminar Cliente</Text>
                             </Box>
                         ),
                         headerRight: () => (
@@ -106,7 +106,7 @@ export default () => {
                                 alignItems='center'
                                 variant='outline'
                                 onPress={
-                                    () => router.push('/books/book-list')
+                                    () => router.push('/customers/customer-list')
                                 }
                             >
                                 <Text fontWeight='bold'>Volver</Text>

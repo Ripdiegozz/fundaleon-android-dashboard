@@ -32,7 +32,6 @@ export function ConfirmDeleteBookModal({ data, setShowAlertDialog, showAlertDial
     const onSubmit = async () => {
         try {
           const res = await makeRequest.delete(`book/delete/${data.id}`);
-          console.log(res);
           toast.show({
             placement: "top",
             render: ({ id }) => {

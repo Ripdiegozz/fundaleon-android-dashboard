@@ -89,7 +89,6 @@ export default function SetUpPage() {
     })
     
     if (!test.success) {
-      console.log(test)
       setShowAlertDialog(true)
       return
     }
@@ -120,7 +119,6 @@ export default function SetUpPage() {
         },
       })
       .then((res) => {
-        console.log(res)
         router.push('/dashboard')
       })
     } catch (error) {

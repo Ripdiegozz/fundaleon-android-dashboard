@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router"
-import { BookIcon, LayoutDashboardIcon } from "lucide-react-native"
+import { BookIcon, LayoutDashboardIcon, UsersIcon } from "lucide-react-native"
 
 export default () => {
     return (
@@ -25,6 +25,17 @@ export default () => {
                         tabBarLabel: "Libros",
                         tabBarIcon: ({ color, size }) => (
                             <BookIcon size={size} color={color} />
+                        ),
+                    }}
+                />
+                <Tabs.Screen
+                    name="customers"
+                    options={{
+                        href: "customers/customer-list",
+                        headerShown: false,
+                        tabBarLabel: "Clientes",
+                        tabBarIcon: ({ color, size }) => (
+                            <UsersIcon size={size} color={color} />
                         ),
                     }}
                 />

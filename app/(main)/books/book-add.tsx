@@ -79,7 +79,6 @@ export default function BookEditView() {
     newBook.publication_year = date.toLocaleDateString()
     newBook.createdAt = new Date().toISOString()
     newBook.updatedAt = null
-    console.log(newBook)
 
     try {
       const response = await makeRequest.post(`/book/add`, newBook)
@@ -99,6 +98,18 @@ export default function BookEditView() {
           )
         },
       })
+      setBook({
+        id: '',
+        title: '',
+        author: '',
+        genre: '',
+        isbn: '',
+        publication_year: '',
+        publisher: '',
+        quantity: 0,
+        createdAt: '',
+        updatedAt: '',
+      })
       setTimeout(() => {
         router.push('/books/book-list')
       }, 3000)
@@ -113,7 +124,7 @@ export default function BookEditView() {
               <VStack space="xs">
                 <ToastTitle>Error</ToastTitle>
                 <ToastDescription>
-                  Ha ocurrido un error al agregar el libro.
+                  Ha ocurrido un error al agregar el libro. Comprueba que no exista un libro con el mismo ISBN.
                 </ToastDescription>
               </VStack>
             </Toast>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useModal } from '../../hooks/use-modal-store'
 import {
     XIcon as CloseIcon,
@@ -44,24 +44,24 @@ import {
 import { router } from 'expo-router';
 import { makeRequest } from '../../lib/axios';
 
-export function SearchAndEditBookModal () {
+export function SearchDeleteCustomerModal () {
     const toast = useToast();
     const { isOpen, onClose, type } = useModal();
     const [isLoading, setIsLoading] = useState(false);
-    const [isbn, setIsbn] = useState('');
-    const [title, setTitle] = useState('');
-    const [inputType, setInputType] = useState('ISBN');
+    const [identification, setIdentification] = useState('');
+    const [email, setEmail] = useState('');
+    const [inputType, setInputType] = useState('Cédula');
 
-    const isModalOpen = isOpen && type === 'editBook';
+    const isModalOpen = isOpen && type === 'deleteCustomer';
 
     const redirectTo = async () => {
       setIsLoading(true);
 
-      if (inputType === 'ISBN') {
+      if (inputType === 'Cédula') {
         try {
-          const res = await makeRequest.get(`book/get/isbn/${isbn}`);
+          const res = await makeRequest.get(`customer/get/identification/${identification}`);
           onClose();
-          return router.push(`/books/edit/${res.data.data.id}`);
+          return router.push(`/customers/delete/${res.data.data.id}`);
         } catch (error) {
           console.log(error);
           toast.show({
@@ -71,16 +71,16 @@ export function SearchAndEditBookModal () {
               return (
                 <Toast nativeID={toastId} action="error" variant="solid" marginTop='$10'>
                   <VStack space="xs">
-                    <ToastTitle>Libro no encontrado</ToastTitle>
+                    <ToastTitle>Cliente no encontrado</ToastTitle>
                     <ToastDescription>
                       {
-                        isbn ? (
+                        identification ? (
                           <Text size='sm'>
-                            El libro con ISBN <Text fontWeight='$semibold' color='$backgroundDark400'>{isbn}</Text> no existe.
+                            El cliente con identification <Text fontWeight='$semibold' color='$backgroundDark400'>{identification}</Text> no existe.
                           </Text>
                         ) : (
                           <Text size='sm'>
-                            El libro con título <Text fontWeight='$semibold' color='$backgroundDark400'>{title}</Text> no existe.
+                            El Cliente con email <Text fontWeight='$semibold' color='$backgroundDark400'>{email}</Text> no existe.
                           </Text>
                         )
                       }
@@ -92,16 +92,16 @@ export function SearchAndEditBookModal () {
           })
         } finally {
           setIsLoading(false);
-          setTitle('')
-          setIsbn('')
+          setEmail('')
+          setIdentification('')
         }
       }
 
-      if (inputType === 'TITLE') {
+      if (inputType === 'Email') {
         try {
-          const res = await makeRequest.get(`book/get/title/${title}`);
+          const res = await makeRequest.get(`customer/get/email/${email}`);
           onClose();
-          return router.push(`/books/edit/${res.data.data.id}`);
+          return router.push(`/customers/delete/${res.data.data.id}`);
         } catch (error) {
           console.log(error);
           toast.show({
@@ -111,16 +111,16 @@ export function SearchAndEditBookModal () {
               return (
                 <Toast nativeID={toastId} action="error" variant="solid" marginTop='$10'>
                   <VStack space="xs">
-                    <ToastTitle>Libro no encontrado</ToastTitle>
+                    <ToastTitle>Cliente no encontrado</ToastTitle>
                     <ToastDescription>
                       {
-                        isbn ? (
+                        identification ? (
                           <Text size='sm'>
-                            El libro con ISBN <Text fontWeight='$semibold' color='$backgroundDark400'>{isbn}</Text> no existe.
+                            El cliente con identification <Text fontWeight='$semibold' color='$backgroundDark400'>{identification}</Text> no existe.
                           </Text>
                         ) : (
                           <Text size='sm'>
-                            El libro con título <Text fontWeight='$semibold' color='$backgroundDark400'>{title}</Text> no existe.
+                            El cliente con email <Text fontWeight='$semibold' color='$backgroundDark400'>{email}</Text> no existe.
                           </Text>
                         )
                       }
@@ -132,8 +132,8 @@ export function SearchAndEditBookModal () {
           })
         } finally {
           setIsLoading(false);
-          setTitle('')
-          setIsbn('')
+          setEmail('')
+          setIdentification('')
         }
       }
 
@@ -149,14 +149,14 @@ export function SearchAndEditBookModal () {
           <AlertDialogBackdrop />
           <AlertDialogContent padding='$4'>
             <AlertDialogHeader>
-              <Heading size='lg'>Editar un título</Heading>
+              <Heading size='lg'>Eliminar un cliente</Heading>
               <AlertDialogCloseButton>
                 <Icon as={CloseIcon} size='lg' color='$darkBlue500' lineHeight='$lg' />
               </AlertDialogCloseButton>
             </AlertDialogHeader>
             <AlertDialogBody>
               <Text size='sm'>
-                Ingresa el ISBN del libro que deseas editar. Si no lo conoces, puedes buscarlo por título.
+                Ingresa la cédula del cliente que deseas eliminar. Si no la conoces, puedes buscarlo por email.
               </Text>
             </AlertDialogBody>
             <Select paddingVertical='$3' paddingHorizontal='$4' onValueChange={(value) => setInputType(value)} defaultValue={inputType} isDisabled={isLoading}>
@@ -172,27 +172,27 @@ export function SearchAndEditBookModal () {
                   <SelectDragIndicatorWrapper>
                     <SelectDragIndicator />
                   </SelectDragIndicatorWrapper>
-                  <SelectItem label="ISBN" value="ISBN" />
-                  <SelectItem label="Título" value="TITLE" />
+                  <SelectItem label="Cédula" value="Cédula" />
+                  <SelectItem label="Email" value="Email" />
                 </SelectContent>
               </SelectPortal>
             </Select>
             <FormControl paddingHorizontal='$4' isDisabled={isLoading}>
               {
-                inputType === 'ISBN' ? (
+                inputType === 'Cédula' ? (
                   <Input>
                     <InputSlot pl="$3">
                       <InputIcon as={SearchIcon} />
                     </InputSlot>
-                    <InputField placeholder="Buscar ISBN..." onChangeText={(text) => setIsbn(text)} />
+                    <InputField placeholder="Buscar cédula..." onChangeText={(text) => setIdentification(text)} />
                   </Input>
                 ) :
-                inputType === 'TITLE' ? (
+                inputType === 'Email' ? (
                   <Input>
                     <InputSlot pl="$3">
                       <InputIcon as={SearchIcon} />
                     </InputSlot>
-                    <InputField placeholder="Buscar Título..." onChangeText={(text) => setTitle(text)} />
+                    <InputField placeholder="Buscar email..." onChangeText={(text) => setEmail(text)} />
                   </Input>
                 )
                 : <Text fontWeight='$semibold' color='$backgroundDark400'>Selecciona el tipo de búsqueda...</Text>
@@ -205,7 +205,7 @@ export function SearchAndEditBookModal () {
                   onPress={redirectTo}
                   disabled={isLoading}
                   >
-                    <ButtonText>Editar</ButtonText>
+                    <ButtonText>Eliminar</ButtonText>
                   </Button>
                 </ButtonGroup>
               </AlertDialogFooter>

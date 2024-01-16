@@ -20,74 +20,75 @@ import {
     ToastDescription,
     VStack
 } from '@gluestack-ui/themed'
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { Skeleton } from '@rneui/themed'
 import { makeRequest } from '../../../../lib/axios'
-import { CalendarIcon } from 'lucide-react-native';
 import { router } from 'expo-router';
 
-interface BookProps {
+interface CustomerProps {
   id: string;
-  title: string;
-  author: string;
-  genre: string;
-  isbn: string;
-  publication_year: string;
-  publisher: string;
-  quantity: number;
+  identification: string;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
   createdAt: string;
-  updatedAt: string;
+  updatedAt: string | null | Date;
+  address: string;
+  job: string;
 }
 
-export default function BookEditView() {
+interface CustomerDTO {
+  id: string;
+  identification: string;
+  full_name: string;
+  email: string;
+  phone_number: string;
+  created_at: string;
+  updated_at: string | null | Date;
+  address: string;
+  job: string;
+}
+
+export default function CustomerEditView() {
   const toast = useToast()
   const params = useLocalSearchParams()
   const [isLoading, setIsLoading] = useState(false)
-  const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
-  const [book, setBook] = useState<BookProps | null>(null)
-  const [bookToEdit, setBookToEdit] = useState<BookProps | null>(null)
+  const [customer, setCustomer] = useState<CustomerProps | null>(null)
+  const [customerToEdit, setCustomerToEdit] = useState<CustomerProps | null>(null)
 
   useEffect(() => {
     try {
-      const getBook = async () => {
-        const response = await makeRequest(`/book/get/${params?.bookId}`)
-        const book : BookProps = response.data.data as BookProps
-        setDate(book?.publication_year ? new Date(book.publication_year) : new Date())
-        setBook(book)
-        setBookToEdit(book)
+      const getcustomer = async () => {
+        const response = await makeRequest(`/customer/get/${params?.customerId}`)
+        const customer : CustomerProps = response.data.data as CustomerProps
+        setCustomer(customer)
+        setCustomerToEdit(customer)
       }
-      getBook()
+      getcustomer()
     } catch (error) {
       console.log(error)
     }
-  }, [params?.bookId])
-
-  const onChange = (event: any, selectedDate: any) => {
-    const currentDate = selectedDate;
-    setShow(false);
-    setDate(currentDate);
-  };
-
-  const showMode = (currentMode: any) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode('date');
-  };
+  }, [params?.customerId])
 
   const onSubmit = async () => {
     setIsLoading(true)
     
-    const newBook = bookToEdit as BookProps
-    newBook.publication_year = date.toISOString().slice(0, 10)
-    newBook.updatedAt = new Date()
+    const newCustomer = customerToEdit as CustomerProps
+    newCustomer.updatedAt = new Date()
+    // set newCustomer to DTO
+    const customerDTO : CustomerDTO = {
+      id: newCustomer.id,
+      identification: newCustomer.identification,
+      full_name: newCustomer.fullName,
+      email: newCustomer.email,
+      phone_number: newCustomer.phoneNumber,
+      created_at: newCustomer.createdAt,
+      updated_at: newCustomer.updatedAt,
+      address: newCustomer.address,
+      job: newCustomer.job
+    }
 
     try {
-      await makeRequest.put(`/book/edit`, newBook)
+      await makeRequest.put(`/customer/edit`, customerDTO)
       toast.show({
         placement: "top",
         render: ({ id }) => {
@@ -95,9 +96,9 @@ export default function BookEditView() {
           return (
             <Toast nativeID={toastId} action="success" variant="solid" marginTop='$10'>
               <VStack space="xs">
-                <ToastTitle>Libro Editado</ToastTitle>
+                <ToastTitle>Cliente Editado</ToastTitle>
                 <ToastDescription>
-                  El libro ha sido editado correctamente.
+                  El cliente ha sido editado correctamente.
                 </ToastDescription>
               </VStack>
             </Toast>
@@ -105,7 +106,7 @@ export default function BookEditView() {
         },
       })
       setTimeout(() => {
-        router.push('/books/book-list')
+        router.push('/customers/customer-list')
       }, 3000)
     } catch (error) {
       console.log(error)
@@ -118,7 +119,7 @@ export default function BookEditView() {
               <VStack space="xs">
                 <ToastTitle>Error</ToastTitle>
                 <ToastDescription>
-                  Ha ocurrido un error al editar el libro.
+                  Ha ocurrido un error al editar el cliente.
                 </ToastDescription>
               </VStack>
             </Toast>
@@ -128,7 +129,7 @@ export default function BookEditView() {
     }
   }
 
-  if (!book) {
+  if (!customer) {
     return (
       <ScrollView padding='$10' paddingTop='$6' bgColor='$white'>
         <Box>
@@ -173,99 +174,83 @@ export default function BookEditView() {
 
   return (
     <ScrollView padding='$10' paddingTop='$4' bgColor='$white' display='flex' flexDirection='column' gap='$4'>
-        <Heading size='lg'>Editando {book.title}</Heading>
-        {/* Book title and author */}
+        <Heading size='lg'>Editando {customer.fullName}</Heading>
+                {/* customer  fullName */}
         <FormControl isDisabled={isLoading} paddingTop='$2'>
             <FormControlLabel>
-            <FormControlLabelText>Título</FormControlLabelText>
+              <FormControlLabelText>Nombre Completo</FormControlLabelText>
             </FormControlLabel>
             <Input>
-            <InputField placeholder={book.title} onChangeText={(text) => {
-              const newBook = bookToEdit as BookProps
-              newBook.title = text
-              setBookToEdit(newBook)
-            }}/>
+              <InputField placeholder={customer.fullName} onChangeText={(text) => {
+                const newCustomer = customerToEdit as CustomerProps
+                newCustomer.fullName = text
+                setCustomerToEdit(newCustomer)
+              }}/>
             </Input>
         </FormControl>
-        {/* Book author */}
+        {/* customer  identification */}
         <FormControl isDisabled={isLoading} paddingTop='$2'>
             <FormControlLabel>
-            <FormControlLabelText>Autor</FormControlLabelText>
+              <FormControlLabelText>Cédula</FormControlLabelText>
             </FormControlLabel>
             <Input>
-            <InputField placeholder={book.author} onChangeText={(text) => {
-              const newBook = bookToEdit as BookProps
-              newBook.author = text
-              setBookToEdit(newBook)
-            }} />
+              <InputField placeholder={customer.identification} onChangeText={(text) => {
+                const newCustomer = customerToEdit as CustomerProps
+                newCustomer.identification = text
+                setCustomerToEdit(newCustomer)
+              }}/>
             </Input>
         </FormControl>
-        {/* Book genre and publication year */}
+        {/* customer  email */}
         <FormControl isDisabled={isLoading} paddingTop='$2'>
             <FormControlLabel>
-            <FormControlLabelText>Género</FormControlLabelText>
+              <FormControlLabelText>Correo Electrónico</FormControlLabelText>
             </FormControlLabel>
             <Input>
-            <InputField placeholder={book.genre} onChangeText={(text) => {
-              const newBook = bookToEdit as BookProps
-              newBook.genre = text
-              setBookToEdit(newBook)
-            }} />
-            </Input>
-        </FormControl> 
-        <Box paddingTop='$2'>
-          <Text fontWeight='$semibold' color='$backgroundLight800'>Fecha de Publicación</Text>
-          <Button onPress={showDatepicker} variant='outline' gap='$2' marginVertical='$2'>
-            <ButtonIcon as={CalendarIcon} size='md' color='$blue500' />
-            <ButtonText>Seleccionar Fecha</ButtonText>
-          </Button>
-          <Text fontWeight='$semibold'>Fecha Actual de Publicación: {date.toLocaleDateString('es-MX')}</Text>
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode={mode}
-              is24Hour={true}
-              onChange={onChange}
-            />
-          )}
-        </Box>
-        {/* Book publisher and quantity */}
-        <FormControl isDisabled={isLoading} paddingTop='$2'>
-            <FormControlLabel>
-            <FormControlLabelText>Editorial</FormControlLabelText>
-            </FormControlLabel>
-            <Input>
-            <InputField placeholder={book.publisher}  onChangeText={(text) => {
-              const newBook = bookToEdit as BookProps
-              newBook.publisher = text
-              setBookToEdit(newBook)
-            }} />
+              <InputField placeholder={customer.email} onChangeText={(text) => {
+                const newCustomer = customerToEdit as CustomerProps
+                newCustomer.email = text
+                setCustomerToEdit(newCustomer)
+              }}/>
             </Input>
         </FormControl>
+        {/* customer  phoneNumber */}
         <FormControl isDisabled={isLoading} paddingTop='$2'>
             <FormControlLabel>
-            <FormControlLabelText>Cantidad</FormControlLabelText>
+              <FormControlLabelText>Teléfono</FormControlLabelText>
             </FormControlLabel>
             <Input>
-            <InputField placeholder={`${book.quantity}`} onChangeText={(text) => {
-              const newBook = bookToEdit as BookProps
-              newBook.quantity = parseInt(text)
-              setBookToEdit(newBook)
-            }} />
+              <InputField placeholder={customer.phoneNumber} onChangeText={(text) => {
+                const newCustomer = customerToEdit as CustomerProps
+                newCustomer.phoneNumber = text
+                setCustomerToEdit(newCustomer)
+              }}/>
             </Input>
         </FormControl>
-        {/* Book ISBN */}
+        {/* customer  address */}
         <FormControl isDisabled={isLoading} paddingTop='$2'>
             <FormControlLabel>
-            <FormControlLabelText>ISBN</FormControlLabelText>
+              <FormControlLabelText>Dirección</FormControlLabelText>
             </FormControlLabel>
             <Input>
-            <InputField placeholder={book.isbn} onChangeText={(text) => {
-              const newBook = bookToEdit as BookProps
-              newBook.isbn = text
-              setBookToEdit(newBook)
-            }} />
+              <InputField placeholder={customer.address} onChangeText={(text) => {
+                const newCustomer = customerToEdit as CustomerProps
+                newCustomer.address = text
+                setCustomerToEdit(newCustomer)
+              }}/>
+            </Input>
+        </FormControl>
+        {/* customer  job */}
+        <FormControl isDisabled={isLoading} paddingTop='$2'>
+            <FormControlLabel>
+              <FormControlLabelText>Trabajo u Oficio</FormControlLabelText>
+            </FormControlLabel>
+            <Input>
+              <InputField placeholder={customer.job} onChangeText={(text) => {
+                const newCustomer = customerToEdit as CustomerProps
+                newCustomer.job = text
+                setCustomerToEdit(newCustomer)
+              }}/>
             </Input>
         </FormControl>
         {/* Submit Button */}
@@ -273,7 +258,7 @@ export default function BookEditView() {
             <Button
             variant="solid"
             action="negative"
-            onPress={() => router.push('/books/book-list')}
+            onPress={() => router.push('/customers/customer-list')}
             disabled={isLoading}
             >
               <ButtonText>Cancelar</ButtonText>

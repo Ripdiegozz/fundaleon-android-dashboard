@@ -34,12 +34,18 @@ import {
     SelectItem,
     Select,
     SelectInput,
-    FormControl
+    FormControl,
+    useToast,
+    Toast,
+    ToastTitle,
+    ToastDescription,
+    VStack
 } from '@gluestack-ui/themed'
 import { makeRequest } from '../../lib/axios';
 import { router } from 'expo-router';
 
 export function SearchDeleteBookModal () {
+    const toast = useToast();
     const { isOpen, onClose, type } = useModal();
     const [isLoading, setIsLoading] = useState(false);
     const [isbn, setIsbn] = useState('');
@@ -54,30 +60,80 @@ export function SearchDeleteBookModal () {
       if (inputType === 'ISBN') {
         try {
           const res = await makeRequest.get(`book/get/isbn/${isbn}`);
+          onClose();
           return router.push(`/books/delete/${res.data.data.id}`);
         } catch (error) {
           console.log(error);
+          toast.show({
+            placement: "top",
+            render: ({ id }) => {
+              const toastId = "toast-" + id
+              return (
+                <Toast nativeID={toastId} action="error" variant="solid" marginTop='$10'>
+                  <VStack space="xs">
+                    <ToastTitle>Libro no encontrado</ToastTitle>
+                    <ToastDescription>
+                      {
+                        isbn ? (
+                          <Text size='sm'>
+                            El libro con ISBN <Text fontWeight='$semibold' color='$backgroundDark400'>{isbn}</Text> no existe.
+                          </Text>
+                        ) : (
+                          <Text size='sm'>
+                            El libro con título <Text fontWeight='$semibold' color='$backgroundDark400'>{title}</Text> no existe.
+                          </Text>
+                        )
+                      }
+                    </ToastDescription>
+                  </VStack>
+                </Toast>
+              )
+            },
+          })
         } finally {
-          onClose();
           setIsLoading(false);
           setTitle('')
           setIsbn('')
-          setInputType('ISBN')
         }
       }
 
       if (inputType === 'TITLE') {
         try {
           const res = await makeRequest.get(`book/get/title/${title}`);
+          onClose();
           return router.push(`/books/delete/${res.data.data.id}`);
         } catch (error) {
           console.log(error);
+          toast.show({
+            placement: "top",
+            render: ({ id }) => {
+              const toastId = "toast-" + id
+              return (
+                <Toast nativeID={toastId} action="error" variant="solid" marginTop='$10'>
+                  <VStack space="xs">
+                    <ToastTitle>Libro no encontrado</ToastTitle>
+                    <ToastDescription>
+                      {
+                        isbn ? (
+                          <Text size='sm'>
+                            El libro con ISBN <Text fontWeight='$semibold' color='$backgroundDark400'>{isbn}</Text> no existe.
+                          </Text>
+                        ) : (
+                          <Text size='sm'>
+                            El libro con título <Text fontWeight='$semibold' color='$backgroundDark400'>{title}</Text> no existe.
+                          </Text>
+                        )
+                      }
+                    </ToastDescription>
+                  </VStack>
+                </Toast>
+              )
+            },
+          })
         } finally {
-          onClose();
           setIsLoading(false);
           setTitle('')
           setIsbn('')
-          setInputType('ISBN')
         }
       }
 
