@@ -1,5 +1,6 @@
 // authContext.tsx
 import React, { createContext, useContext } from 'react';
+import { RequestStore } from './requestStore';
 import { Session } from '@supabase/supabase-js';
 import { create } from 'zustand';
 import { supabase } from '../lib/supabase';
@@ -24,6 +25,11 @@ const useAuthStore = create<AuthStore>((set) => ({
 
         const session = data?.session
 
+        if (!session) {
+          throw new Error('No se pudo iniciar sesión');
+        }
+
+        RequestStore.setState({session: session})
         set({ session });
     },
     logout: async () => {

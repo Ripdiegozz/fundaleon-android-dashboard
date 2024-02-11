@@ -19,6 +19,7 @@ const makeRequest: AxiosInstance = axios.create({
   baseURL: "http://192.168.1.2:8080/",
   headers: {
     "Content-Type": "application/json",
+    "Authorization": '5c77ec46-005f-4d33-9d7c-02df4da32197'
   },
 });
 

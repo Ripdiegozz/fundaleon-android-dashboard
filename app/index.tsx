@@ -8,7 +8,6 @@ export default function App() {
 
   useEffect(() => {
     // logout if session is persisted
-    if (session) console.log('session', session)
     if (session) logout()
   }, [])
 

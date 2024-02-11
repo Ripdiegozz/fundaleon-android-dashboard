@@ -84,7 +84,7 @@ export default function BookEditView() {
     
     const newBook = bookToEdit as BookProps
     newBook.publication_year = date.toISOString().slice(0, 10)
-    newBook.updatedAt = new Date()
+    newBook.updatedAt = new Date().toLocaleDateString()
 
     try {
       await makeRequest.put(`/book/edit`, newBook)

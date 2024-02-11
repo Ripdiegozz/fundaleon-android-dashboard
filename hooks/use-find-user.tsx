@@ -31,6 +31,7 @@ export const useFindUser = () => {
                         'Content-Type': 'application/json',
                         // cors
                         'Access-Control-Allow-Origin': '*',
+                        'Authorization': session?.user?.id
                     },
                 })
     
