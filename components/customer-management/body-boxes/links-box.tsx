@@ -28,8 +28,7 @@ export const LinksBox = () => {
                     <ButtonText fontSize='$sm' fontWeight='$medium'>Editar</ButtonText>
                 </Button>
                 <Button variant='outline' action='negative' display='flex' justifyContent='center' alignItems='center' gap='$2' width='$40' onPress={() => onOpen('deleteCustomer')}>
-                    <Icon as={TrashIcon} size='md' color='$rose500' />
-                    <ButtonText fontSize='$sm' fontWeight='$medium'>Eliminar</ButtonText>
+                    <ButtonText fontSize='$sm' fontWeight='$medium'>Cambiar Estado</ButtonText>
                 </Button>
             </Box>
         </Box>

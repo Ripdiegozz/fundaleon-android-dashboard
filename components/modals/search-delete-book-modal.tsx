@@ -50,7 +50,7 @@ export function SearchDeleteBookModal () {
     const [isLoading, setIsLoading] = useState(false);
     const [isbn, setIsbn] = useState('');
     const [title, setTitle] = useState('');
-    const [inputType, setInputType] = useState('ISBN');
+    const inputType = 'ISBN';
 
     const isModalOpen = isOpen && type === 'deleteBook';
 
@@ -61,7 +61,7 @@ export function SearchDeleteBookModal () {
         try {
           const res = await makeRequest.get(`book/get/isbn/${isbn}`);
           onClose();
-          return router.push(`/books/delete/${res.data.data.id}`);
+          return router.push(`/books/inactive/${res.data.data.id}`);
         } catch (error) {
           console.log(error);
           toast.show({
@@ -96,47 +96,6 @@ export function SearchDeleteBookModal () {
           setIsbn('')
         }
       }
-
-      if (inputType === 'TITLE') {
-        try {
-          const res = await makeRequest.get(`book/get/title/${title}`);
-          onClose();
-          return router.push(`/books/delete/${res.data.data.id}`);
-        } catch (error) {
-          console.log(error);
-          toast.show({
-            placement: "top",
-            render: ({ id }) => {
-              const toastId = "toast-" + id
-              return (
-                <Toast nativeID={toastId} action="error" variant="solid" marginTop='$10'>
-                  <VStack space="xs">
-                    <ToastTitle>Libro no encontrado</ToastTitle>
-                    <ToastDescription>
-                      {
-                        isbn ? (
-                          <Text size='sm'>
-                            El libro con ISBN <Text fontWeight='$semibold' color='$backgroundDark400'>{isbn}</Text> no existe.
-                          </Text>
-                        ) : (
-                          <Text size='sm'>
-                            El libro con título <Text fontWeight='$semibold' color='$backgroundDark400'>{title}</Text> no existe.
-                          </Text>
-                        )
-                      }
-                    </ToastDescription>
-                  </VStack>
-                </Toast>
-              )
-            },
-          })
-        } finally {
-          setIsLoading(false);
-          setTitle('')
-          setIsbn('')
-        }
-      }
-
       return;
     }
 
@@ -149,53 +108,26 @@ export function SearchDeleteBookModal () {
           <AlertDialogBackdrop />
           <AlertDialogContent padding='$4'>
             <AlertDialogHeader>
-              <Heading size='lg'>Eliminar un título</Heading>
+              <Heading size='lg'>Estado de un título</Heading>
               <AlertDialogCloseButton>
                 <Icon as={CloseIcon} size='lg' color='$darkBlue500' lineHeight='$lg' />
               </AlertDialogCloseButton>
             </AlertDialogHeader>
             <AlertDialogBody>
               <Text size='sm'>
-                Ingresa el ISBN del libro que deseas eliminar. Si no lo conoces, puedes buscarlo por título.
+                Ingresa el ISBN del libro al que deseas cambiar el estado.
               </Text>
             </AlertDialogBody>
-            <Select paddingVertical='$3' paddingHorizontal='$4' onValueChange={(value) => setInputType(value)} defaultValue={inputType} isDisabled={isLoading}>
-              <SelectTrigger variant="outline" size="md">
-                <SelectInput placeholder="Opción de Búsqueda" />
-                <SelectIcon>
-                  <Icon as={ChevronDownIcon} />
-                </SelectIcon>
-              </SelectTrigger>
-              <SelectPortal>
-                <SelectBackdrop />
-                <SelectContent>
-                  <SelectDragIndicatorWrapper>
-                    <SelectDragIndicator />
-                  </SelectDragIndicatorWrapper>
-                  <SelectItem label="ISBN" value="ISBN" />
-                  <SelectItem label="Título" value="TITLE" />
-                </SelectContent>
-              </SelectPortal>
-            </Select>
             <FormControl paddingHorizontal='$4' isDisabled={isLoading}>
               {
-                inputType === 'ISBN' ? (
+                inputType === 'ISBN' && (
                   <Input>
                     <InputSlot pl="$3">
                       <InputIcon as={SearchIcon} />
                     </InputSlot>
                     <InputField placeholder="Buscar ISBN..." onChangeText={(text) => setIsbn(text)} />
                   </Input>
-                ) :
-                inputType === 'TITLE' ? (
-                  <Input>
-                    <InputSlot pl="$3">
-                      <InputIcon as={SearchIcon} />
-                    </InputSlot>
-                    <InputField placeholder="Buscar Título..." onChangeText={(text) => setTitle(text)} />
-                  </Input>
                 )
-                : <Text fontWeight='$semibold' color='$backgroundDark400'>Selecciona el tipo de búsqueda...</Text>
               }
               <AlertDialogFooter>
                 <ButtonGroup space="sm">

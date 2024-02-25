@@ -97,46 +97,6 @@ export function SearchAndEditBookModal () {
         }
       }
 
-      if (inputType === 'TITLE') {
-        try {
-          const res = await makeRequest.get(`book/get/title/${title}`);
-          onClose();
-          return router.push(`/books/edit/${res.data.data.id}`);
-        } catch (error) {
-          console.log(error);
-          toast.show({
-            placement: "top",
-            render: ({ id }) => {
-              const toastId = "toast-" + id
-              return (
-                <Toast nativeID={toastId} action="error" variant="solid" marginTop='$10'>
-                  <VStack space="xs">
-                    <ToastTitle>Libro no encontrado</ToastTitle>
-                    <ToastDescription>
-                      {
-                        isbn ? (
-                          <Text size='sm'>
-                            El libro con ISBN <Text fontWeight='$semibold' color='$backgroundDark400'>{isbn}</Text> no existe.
-                          </Text>
-                        ) : (
-                          <Text size='sm'>
-                            El libro con título <Text fontWeight='$semibold' color='$backgroundDark400'>{title}</Text> no existe.
-                          </Text>
-                        )
-                      }
-                    </ToastDescription>
-                  </VStack>
-                </Toast>
-              )
-            },
-          })
-        } finally {
-          setIsLoading(false);
-          setTitle('')
-          setIsbn('')
-        }
-      }
-
       return;
     }
 
@@ -156,46 +116,19 @@ export function SearchAndEditBookModal () {
             </AlertDialogHeader>
             <AlertDialogBody>
               <Text size='sm'>
-                Ingresa el ISBN del libro que deseas editar. Si no lo conoces, puedes buscarlo por título.
+                Ingresa el ISBN del libro que deseas editar.
               </Text>
             </AlertDialogBody>
-            <Select paddingVertical='$3' paddingHorizontal='$4' onValueChange={(value) => setInputType(value)} defaultValue={inputType} isDisabled={isLoading}>
-              <SelectTrigger variant="outline" size="md">
-                <SelectInput placeholder="Opción de Búsqueda" />
-                <SelectIcon>
-                  <Icon as={ChevronDownIcon} />
-                </SelectIcon>
-              </SelectTrigger>
-              <SelectPortal>
-                <SelectBackdrop />
-                <SelectContent>
-                  <SelectDragIndicatorWrapper>
-                    <SelectDragIndicator />
-                  </SelectDragIndicatorWrapper>
-                  <SelectItem label="ISBN" value="ISBN" />
-                  <SelectItem label="Título" value="TITLE" />
-                </SelectContent>
-              </SelectPortal>
-            </Select>
             <FormControl paddingHorizontal='$4' isDisabled={isLoading}>
               {
-                inputType === 'ISBN' ? (
+                inputType === 'ISBN' && (
                   <Input>
                     <InputSlot pl="$3">
                       <InputIcon as={SearchIcon} />
                     </InputSlot>
                     <InputField placeholder="Buscar ISBN..." onChangeText={(text) => setIsbn(text)} />
                   </Input>
-                ) :
-                inputType === 'TITLE' ? (
-                  <Input>
-                    <InputSlot pl="$3">
-                      <InputIcon as={SearchIcon} />
-                    </InputSlot>
-                    <InputField placeholder="Buscar Título..." onChangeText={(text) => setTitle(text)} />
-                  </Input>
                 )
-                : <Text fontWeight='$semibold' color='$backgroundDark400'>Selecciona el tipo de búsqueda...</Text>
               }
               <AlertDialogFooter>
                 <ButtonGroup space="sm">

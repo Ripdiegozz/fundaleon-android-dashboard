@@ -16,29 +16,7 @@ export const CustomersTable = () => {
   const [items, setItems] = useState([
     {
       id: '1',
-      full_name: 'Cliente 1',
-      identification: '1234567890',
-      actions: [
-        {
-          key: 1,
-          name: 'Editar'
-        }
-      ]
-    },
-    {
-      id: '2',
-      full_name: 'Cliente 2',
-      identification: '1234567890',
-      actions: [
-        {
-          key: 1,
-          name: 'Editar'
-        }
-      ]
-    },
-    {
-      id: '3',
-      full_name: 'Cliente 3',
+      full_name: 'Cargando...',
       identification: '1234567890',
       actions: [
         {
@@ -51,29 +29,7 @@ export const CustomersTable = () => {
   const [originalItems, setOriginalItems] = useState([
     {
       id: '1',
-      full_name: 'Cliente 1',
-      identification: '1234567890',
-      actions: [
-        {
-          key: 1,
-          name: 'Editar'
-        }
-      ]
-    },
-    {
-      id: '2',
-      full_name: 'Cliente 2',
-      identification: '1234567890',
-      actions: [
-        {
-          key: 1,
-          name: 'Editar'
-        }
-      ]
-    },
-    {
-      id: '3',
-      full_name: 'Cliente 3',
+      full_name: 'Cargando...',
       identification: '1234567890',
       actions: [
         {

@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ProgressChart } from 'react-native-chart-kit'
-import { Text, Box, Icon, Badge, BadgeText } from '@gluestack-ui/themed'
-import { ChevronUpIcon } from 'lucide-react-native'
+import { Text, Box } from '@gluestack-ui/themed'
 import { makeRequest } from '../../../lib/axios'
 
 export const CustomerBox = () => {
@@ -15,7 +13,7 @@ export const CustomerBox = () => {
     }
 
     getCustomersCount()
-  }, [])
+  }, [customers])
 
   return (
     <Box width='$full' paddingBottom='$4' bgColor='$white' display='flex' justifyContent='flex-start' alignItems='flex-start' padding='$4' borderRadius='$lg'>
@@ -24,12 +22,6 @@ export const CustomerBox = () => {
           <Box>
             <Box display='flex' flexDirection='row' rowGap='$1' alignItems='center'>
               <Text fontSize='$lg' fontWeight='$medium'>Clientes registrados</Text>
-              {/* <Badge size="md" variant="solid" borderRadius="$none" action="success" marginLeft="$2">
-                <BadgeText fontSize='$md' fontWeight='$regular'>
-                  <Icon as={ChevronUpIcon} size='md' color='$green' marginLeft='$2' />
-                  TODO
-                </BadgeText>
-              </Badge> */}
             </Box>
           </Box>
         </Box>

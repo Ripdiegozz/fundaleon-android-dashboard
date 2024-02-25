@@ -32,7 +32,7 @@ interface BookProps {
   author: string;
   genre: string;
   isbn: string;
-  publication_year: string;
+  publicationYear: string;
   publisher: string;
   quantity: number;
   createdAt: string;
@@ -54,7 +54,8 @@ export default function BookEditView() {
       const getBook = async () => {
         const response = await makeRequest(`/book/get/${params?.bookId}`)
         const book : BookProps = response.data.data as BookProps
-        setDate(book?.publication_year ? new Date(book.publication_year) : new Date())
+        console.log(response)
+        setDate(book?.publicationYear ? new Date(book.publicationYear) : new Date())
         setBook(book)
         setBookToEdit(book)
       }
@@ -83,7 +84,7 @@ export default function BookEditView() {
     setIsLoading(true)
     
     const newBook = bookToEdit as BookProps
-    newBook.publication_year = date.toISOString().slice(0, 10)
+    newBook.publicationYear = date.toISOString()
     newBook.updatedAt = new Date().toLocaleDateString()
 
     try {
@@ -106,7 +107,7 @@ export default function BookEditView() {
       })
       setTimeout(() => {
         router.push('/books/book-list')
-      }, 3000)
+      }, 1200)
     } catch (error) {
       console.log(error)
       toast.show({

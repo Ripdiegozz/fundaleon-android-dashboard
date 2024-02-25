@@ -23,7 +23,6 @@ export const BookBox = () => {
   })
 
   useEffect(() => {
-    //TODO: Change for a react query hook tomorrow
     const getCustomer = async () => {
       const { data } = await makeRequest.get('/customer/get/count/month')
       // count the actual month
@@ -72,9 +71,6 @@ export const BookBox = () => {
             </Box>
             <Box display='flex' flexDirection='row' rowGap='$1' alignItems='center'>
               <Text fontSize='$md' fontWeight='$regular'>Este mes.</Text>
-              <Badge size="md" variant="solid" borderRadius="$none" action="success" marginLeft="$2">
-                <BadgeText fontSize='$md' fontWeight='$regular'>+ %100</BadgeText>
-              </Badge>
             </Box>
           </Box>
           <ProgressChart

@@ -24,7 +24,7 @@ import {
 import { makeRequest } from "../../lib/axios";
 import { router } from "expo-router";
 
-export function ConfirmStatusBookModal({
+export function ConfirmStatusCustomerModal({
   data,
   setShowAlertDialog,
   showAlertDialog,
@@ -37,7 +37,7 @@ export function ConfirmStatusBookModal({
 
   const onSubmit = async () => {
     try {
-      await makeRequest.put(`book/change/status/${data.id}/${!data.status}`);
+      await makeRequest.put(`customer/change/status/${data.id}/${!data.status}`);
       console.log("Book status changed successfully.")
       toast.show({
         placement: "top",
@@ -53,7 +53,7 @@ export function ConfirmStatusBookModal({
               <VStack space="xs">
                 <ToastTitle>Estado cambiado existosamente</ToastTitle>
                 <ToastDescription>
-                  El estado del libro ha cambiado exitosamente en la base de datos.
+                  El estado del cliente ha cambiado exitosamente en la base de datos.
                 </ToastDescription>
               </VStack>
             </Toast>
@@ -62,7 +62,7 @@ export function ConfirmStatusBookModal({
       });
 
       setTimeout(() => {
-        router.push("/books/book-list");
+        router.push("/customers/customer-list");
       }, 1200);
     } catch (error) {
       console.log(error);
@@ -89,8 +89,8 @@ export function ConfirmStatusBookModal({
           </AlertDialogHeader>
           <AlertDialogBody>
             <Text size="md" paddingBottom="$2">
-              ¿Está seguro que desea {!data.status ? "activar" : "inactivar"} el
-              libro <Text fontWeight="$medium">{data.title}</Text> de la base de
+              ¿Está seguro que desea {!data.status ? "activar" : "inactivar"} el estado el cliente{" "}
+              <Text fontWeight="$medium">{data.fullName}</Text> de la base de
               datos?
             </Text>
           </AlertDialogBody>

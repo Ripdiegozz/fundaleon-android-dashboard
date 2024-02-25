@@ -76,7 +76,7 @@ export default function BookEditView() {
     setIsLoading(true)
 
     const newBook = book as BookProps
-    newBook.publication_year = date.toLocaleDateString()
+    newBook.publication_year = date.toISOString()
     newBook.createdAt = new Date().toISOString()
     newBook.updatedAt = null
 
@@ -112,7 +112,7 @@ export default function BookEditView() {
       })
       setTimeout(() => {
         router.push('/books/book-list')
-      }, 3000)
+      }, 1200)
     } catch (error) {
       console.log(error)
       toast.show({

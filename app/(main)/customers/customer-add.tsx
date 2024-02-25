@@ -99,7 +99,7 @@ export default function BookEditView() {
       })
       setTimeout(() => {
         router.push('/customers/customer-list')
-      }, 3000)
+      }, 1200)
     } catch (error) {
       console.log(error)
       toast.show({
@@ -210,7 +210,7 @@ export default function BookEditView() {
         {/* Customer Job*/}
         <FormControl isDisabled={isLoading} paddingTop='$2'>
             <FormControlLabel>
-            <FormControlLabelText>Trabajo</FormControlLabelText>
+            <FormControlLabelText>Ocupación</FormControlLabelText>
             </FormControlLabel>
             <Input>
               <InputField onChangeText={

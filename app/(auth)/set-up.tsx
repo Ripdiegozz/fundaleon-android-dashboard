@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
 import {
   FormControl,
   FormControlLabel,
@@ -16,60 +16,67 @@ import {
   ButtonText,
   Box,
   Icon,
-  ScrollView
-} from '@gluestack-ui/themed'
+  ScrollView,
+} from "@gluestack-ui/themed";
 import {
   MailIcon,
   UserIcon,
   UsersIcon,
   PhoneIcon,
   FingerprintIcon,
-  LibraryBig 
-} from 'lucide-react-native'
-import { router, Stack } from 'expo-router'
-import { WrongSetupDialog } from '../../components/modals/wrong-set-up-modal'
-import { makeRequest } from '../../lib/axios'
-import { useAuth } from '../../context/authStore'
-import { useFindUser } from '../../hooks/use-find-user'
-import * as z from 'zod'
+  LibraryBig,
+} from "lucide-react-native";
+import { router, Stack } from "expo-router";
+import { WrongSetupDialog } from "../../components/modals/wrong-set-up-modal";
+import { makeRequest } from "../../lib/axios";
+import { useAuth } from "../../context/authStore";
+import * as z from "zod";
+import { Alert } from "react-native";
 
 const schema = z.object({
-  firstName: z.string().min(1, { message: 'Ingresa tu nombre' }),
-  lastName: z.string().min(1, { message: 'Ingresa tu apellido' }),
-  email: z.string().email({ message: 'Ingresa un email válido' }),
-  phoneNumber: z.string().min(1, { message: 'Ingresa tu número de teléfono' }).regex(/^(0414|0424|0412|0416|0426)[0-9]{7}$/, { message: 'Ingresa un número de teléfono válido'}),
-  cedula: z.string().min(1, { message: 'Ingresa tu número de cédula' }).regex(/^([0-9]{6,10})/, { message: 'Ingresa un número de cédula válido' }),
-})
+  firstName: z.string().min(1, { message: "Ingresa tu nombre" }),
+  lastName: z.string().min(1, { message: "Ingresa tu apellido" }),
+  email: z.string().email({ message: "Ingresa un email válido" }),
+  phoneNumber: z
+    .string()
+    .min(1, { message: "Ingresa tu número de teléfono" })
+    .regex(/^(0414|0424|0412|0416|0426)[0-9]{7}$/, {
+      message: "Ingresa un número de teléfono válido, ej: 04121234567",
+    }),
+  cedula: z
+    .string()
+    .min(1, { message: "Ingresa tu número de cédula" })
+    .regex(/^([0-9]{6,10})/, { message: "Ingresa un número de cédula válido" }),
+});
 
 interface FormValues {
-  firstName: string
-  lastName: string
-  email: string
-  phoneNumber: string
-  cedula: string
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  cedula: string;
 }
 
 export default function SetUpPage() {
-  const { user } = useFindUser()
-  const { session } = useAuth()
+  const { session } = useAuth();
 
-  const [sessionNow, setSessionNow] = useState(false)
-  const [showAlertDialog, setShowAlertDialog] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [sessionNow, setSessionNow] = useState(false);
+  const [showAlertDialog, setShowAlertDialog] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState<FormValues>({
-    firstName: '',
-    lastName: '',
-    email: session?.user?.email || '',
-    phoneNumber: '',
-    cedula: '',
-  })
+    firstName: "",
+    lastName: "",
+    email: session?.user?.email || "",
+    phoneNumber: "",
+    cedula: "",
+  });
 
   useEffect(() => {
     if (session) {
-      setSessionNow(true)
+      setSessionNow(true);
     }
-  }, [])
-  
+  }, []);
+
   const handleInputChange = (field: keyof FormValues, value: string) => {
     setFormValues((prevValues) => ({
       ...prevValues,
@@ -78,7 +85,7 @@ export default function SetUpPage() {
   };
 
   const handleSubmit = async () => {
-    const { firstName, lastName, email, phoneNumber, cedula } = formValues
+    const { firstName, lastName, email, phoneNumber, cedula } = formValues;
 
     const test = schema.safeParse({
       firstName,
@@ -86,21 +93,22 @@ export default function SetUpPage() {
       email,
       phoneNumber,
       cedula,
-    })
-    
-    if (!test.success) {
-      setShowAlertDialog(true)
-      return
+    });
+
+    // if phone number doesnt match the regex pattern show alert dialog
+   if (!test.success) {
+      Alert.alert(test.error.errors[0].message);
+      return;
     }
 
     try {
-      setLoading(true)
-      
+      setLoading(true);
+
       // Set fullname and delete spaces at the beginning and end
-      const fullName = `${firstName} ${lastName}`.trim()
+      const fullName = `${firstName} ${lastName}`.trim();
 
       if (!session) {
-        return router.push('/sign-up')
+        return router.push("/sign-up");
       }
 
       const body = {
@@ -109,33 +117,33 @@ export default function SetUpPage() {
         full_name: fullName,
         phone_number: phoneNumber,
         cedula,
-        role: 'ADMIN'
-      }
+        role: "ADMIN",
+      };
 
-      await makeRequest.post('/user/add', body, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      })
-      .then((res) => {
-        router.push('/dashboard')
-      })
+      await makeRequest
+        .post("/user/add", body, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .then((res) => {
+          router.replace("/dashboard");
+        });
     } catch (error) {
-      setShowAlertDialog(true)
-      console.error('Axios Error:', error);
+      setShowAlertDialog(true);
+      console.error("Axios Error:", error);
     } finally {
-      setLoading(false)
-    }  
-  }
-
-  if (user) {
-    return router.push('/dashboard')
-  }
+      setLoading(false);
+    }
+  };
 
   return (
     <ScrollView>
-      <WrongSetupDialog showAlertDialog={showAlertDialog} setShowAlertDialog={setShowAlertDialog} />
+      <WrongSetupDialog
+        showAlertDialog={showAlertDialog}
+        setShowAlertDialog={setShowAlertDialog}
+      />
       <Stack.Screen options={{ headerShown: false }} />
       <FormControl
         paddingHorizontal="$8"
@@ -167,9 +175,7 @@ export default function SetUpPage() {
         </Box>
         {/* MOCK LOGO BOX */}
         <Box mb="$8">
-          <Heading lineHeight="$md">
-            Un paso más
-          </Heading>
+          <Heading lineHeight="$md">Un paso más</Heading>
           <Text lineHeight="$md">
             Necesitamos que completes tu información para continuar.
           </Text>
@@ -185,18 +191,16 @@ export default function SetUpPage() {
               <InputSlot pl="$3">
                 <InputIcon as={UserIcon} color="$darkBlue500" />
               </InputSlot>
-              <InputField 
-                type="text" 
-                value={formValues.firstName} 
-                onChangeText={(text) => handleInputChange('firstName', text)} 
-                placeholder='Nombre' 
-                keyboardType='default' 
+              <InputField
+                type="text"
+                value={formValues.firstName}
+                onChangeText={(text) => handleInputChange("firstName", text)}
+                placeholder="Nombre"
+                keyboardType="default"
               />
             </Input>
             <FormControlHelper>
-              <FormControlHelperText>
-                Ingresa tus nombres
-              </FormControlHelperText>
+              <FormControlHelperText>Ingresa tus nombres</FormControlHelperText>
             </FormControlHelper>
           </VStack>
           <VStack space="xs">
@@ -209,12 +213,12 @@ export default function SetUpPage() {
               <InputSlot pl="$3">
                 <InputIcon as={UsersIcon} color="$darkBlue500" />
               </InputSlot>
-              <InputField 
-                type="text" 
-                value={formValues.lastName} 
-                onChangeText={(text) => handleInputChange('lastName', text)} 
-                placeholder='Apellido' 
-                keyboardType='default' 
+              <InputField
+                type="text"
+                value={formValues.lastName}
+                onChangeText={(text) => handleInputChange("lastName", text)}
+                placeholder="Apellido"
+                keyboardType="default"
               />
             </Input>
             <FormControlHelper>
@@ -237,9 +241,9 @@ export default function SetUpPage() {
                 <InputField
                   type="text"
                   value={session ? session?.user?.email : formValues.email}
-                  onChangeText={(text) => handleInputChange('email', text)}
-                  placeholder='Email'
-                  keyboardType='email-address'
+                  onChangeText={(text) => handleInputChange("email", text)}
+                  placeholder="Email"
+                  keyboardType="email-address"
                 />
               </Input>
             </VStack>
@@ -254,12 +258,12 @@ export default function SetUpPage() {
               <InputSlot pl="$3">
                 <InputIcon as={PhoneIcon} color="$darkBlue500" />
               </InputSlot>
-              <InputField 
-                type="text" 
-                value={formValues.phoneNumber} 
-                onChangeText={(text) => handleInputChange('phoneNumber', text)} 
-                placeholder='(04XX)XXXXXXX' 
-                keyboardType='phone-pad'
+              <InputField
+                type="text"
+                value={formValues.phoneNumber}
+                onChangeText={(text) => handleInputChange("phoneNumber", text)}
+                placeholder="(04XX)XXXXXXX"
+                keyboardType="phone-pad"
               />
             </Input>
             <FormControlHelper>
@@ -278,12 +282,12 @@ export default function SetUpPage() {
               <InputSlot pl="$3">
                 <InputIcon as={FingerprintIcon} color="$darkBlue500" />
               </InputSlot>
-              <InputField  
-                type="text" 
-                value={formValues.cedula} 
-                onChangeText={(text) => handleInputChange('cedula', text)} 
-                placeholder='12345678' 
-                keyboardType='phone-pad'
+              <InputField
+                type="text"
+                value={formValues.cedula}
+                onChangeText={(text) => handleInputChange("cedula", text)}
+                placeholder="12345678"
+                keyboardType="phone-pad"
               />
             </Input>
             <FormControlHelper>
@@ -292,15 +296,11 @@ export default function SetUpPage() {
               </FormControlHelperText>
             </FormControlHelper>
           </VStack>
-          <Button
-            ml="auto"
-            onPress={handleSubmit}
-            isDisabled={loading}
-          >
+          <Button ml="auto" onPress={handleSubmit} isDisabled={loading}>
             <ButtonText color="$white">Entrar</ButtonText>
           </Button>
         </VStack>
       </FormControl>
     </ScrollView>
-  )
+  );
 }

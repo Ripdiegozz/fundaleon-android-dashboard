@@ -88,12 +88,12 @@ export default () => {
                     }}
                 />
                 <Stack.Screen
-                    name="delete/[customerId]"
+                    name="inactive/[customerId]"
                     options={{
                         headerTitle: () => (
                             <Box display='flex' flexDirection='row' gap='$2'>
                                 <Icon as={TrashIcon} size='lg' color='$black' />
-                                <Text fontSize='$xl' fontWeight='bold'>Eliminar Cliente</Text>
+                                <Text fontSize='$xl' fontWeight='bold'>Inactivar Cliente</Text>
                             </Box>
                         ),
                         headerRight: () => (

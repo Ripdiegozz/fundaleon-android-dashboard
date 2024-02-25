@@ -88,12 +88,12 @@ export default () => {
                     }}
                 />
                 <Stack.Screen
-                    name="delete/[bookId]"
+                    name="inactive/[bookId]"
                     options={{
                         headerTitle: () => (
                             <Box display='flex' flexDirection='row' gap='$2'>
                                 <Icon as={TrashIcon} size='lg' color='$black' />
-                                <Text fontSize='$xl' fontWeight='bold'>Eliminar Libro</Text>
+                                <Text fontSize='$xl' fontWeight='bold'>Estados de Libro</Text>
                             </Box>
                         ),
                         headerRight: () => (

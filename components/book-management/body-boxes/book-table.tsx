@@ -16,31 +16,7 @@ export const BooksTable = () => {
   const [items, setItems] = useState([
     {
       id: '1',
-      title: 'Libro 1',
-      quantity: 10,
-      isbn: '1234567890',
-      actions: [
-        {
-          key: 1,
-          name: 'Editar'
-        }
-      ]
-    },
-    {
-      id: '2',
-      title: 'Libro 2',
-      quantity: 10,
-      isbn: '1234567890',
-      actions: [
-        {
-          key: 1,
-          name: 'Editar'
-        }
-      ]
-    },
-    {
-      id: '3',
-      title: 'Libro 3',
+      title: 'Cargando...',
       quantity: 10,
       isbn: '1234567890',
       actions: [
@@ -54,31 +30,7 @@ export const BooksTable = () => {
   const [originalItems, setOriginalItems] = useState([
     {
       id: '1',
-      title: 'Libro 1',
-      quantity: 10,
-      isbn: '1234567890',
-      actions: [
-        {
-          key: 1,
-          name: 'Editar'
-        }
-      ]
-    },
-    {
-      id: '2',
-      title: 'Libro 2',
-      quantity: 10,
-      isbn: '1234567890',
-      actions: [
-        {
-          key: 1,
-          name: 'Editar'
-        }
-      ]
-    },
-    {
-      id: '3',
-      title: 'Libro 3',
+      title: 'Cargando...',
       quantity: 10,
       isbn: '1234567890',
       actions: [

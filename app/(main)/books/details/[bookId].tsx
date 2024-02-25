@@ -25,9 +25,10 @@ interface BookProps {
   quantity: number;
   createdAt: string;
   updatedAt: string;
+  status: boolean;
 }
 
-export default function BookDetailsView() {
+export default function BookInactivaView() {
   const params = useLocalSearchParams()
   const [book, setBook] = useState<BookProps | null>(null)
   const [booksFromSameAuthor, setBooksFromSameAuthor] = useState<BookProps[] | null>(null)
@@ -109,7 +110,7 @@ export default function BookDetailsView() {
     <ScrollView padding='$10' paddingTop='$8' bgColor='$white'>
       {/* Book title and author */}
       <Box>
-        <Text fontWeight='bold' fontSize='$5xl' paddingTop='$5' paddingBottom='$1' lineHeight='$4xl'>{book?.title || 'Cargando...'}</Text>
+        <Text fontWeight='bold' fontSize='$4xl' paddingTop='$5' paddingBottom='$1' lineHeight='$4xl'>{book?.title || 'Cargando...'}</Text>
         <Text fontSize='$xl' fontWeight='semibold' paddingTop='$2'>{book?.author || 'Cargando...'}</Text>
       </Box>
       {/* Book Properties */}
@@ -150,10 +151,10 @@ export default function BookDetailsView() {
       {/* Book quantity in stock and in loan */}
       {/* TODO: book quantity and loan box */}
       {/* TODO: book Actions and loan box */}
-      <Box paddingTop='$6' paddingBottom='$0' display='flex' flexDirection='row' alignItems='center' gap='$2'>
+      <Box paddingTop='$4' paddingBottom='$0' display='flex' flexDirection='row' alignItems='center' gap='$2'>
         <Text fontSize='$lg' fontWeight='bold' paddingTop='$2'>Estado:</Text>
-        <Badge bgColor={book?.quantity ? '$green600' : '$rose500'} marginTop='$2' width='$24' display='flex' justifyContent='center' flexDirection='row' borderRadius='$md'>
-          <BadgeText color='$white'>{book?.quantity ? 'Disponible' : 'No disponible'}</BadgeText>
+        <Badge bgColor={book?.status ? '$green600' : '$rose500'} marginTop='$2' display='flex' justifyContent='center' flexDirection='row' borderRadius='$md'>
+          <BadgeText color='$white'>{book?.status ? 'Activo' : 'Inactivo'}</BadgeText>
         </Badge>
       </Box>
       {/* Book loan history */}
@@ -182,14 +183,18 @@ export default function BookDetailsView() {
       <ButtonGroup space="sm" paddingTop='$8' width='$full' display='flex' justifyContent='flex-end'>
         <Button
         variant="solid"
-        action="negative"
-        onPress={() => router.push(`/books/delete/${book?.id}`)}
+        action={book?.status ? "negative" : "primary"}
+        onPress={() => router.push(`/books/inactive/${book?.id}`)}
         >
-          <ButtonText>Eliminar</ButtonText>
+          <ButtonText>
+            {
+              book?.status ? 'Inactivar' : 'Activar'
+            }
+          </ButtonText>
         </Button>
         <Button
         variant="solid"
-        action="primary"
+        action="secondary"
         onPress={() => router.push(`/books/edit/${book?.id}`)}
         >
           <ButtonText>Editar</ButtonText>

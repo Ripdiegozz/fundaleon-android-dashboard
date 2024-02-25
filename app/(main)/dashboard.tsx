@@ -1,13 +1,26 @@
-import React from 'react';
-import { router } from 'expo-router';
+import React, { useEffect, useState } from 'react';
 import { Box, Text, ScrollView } from '@gluestack-ui/themed';
 import { DashboardHeader } from '../../components/dashboard/header';
 import { DashboardBody } from '../../components/dashboard/body';
 import { useFindUser } from '../../hooks/use-find-user';
+import { router } from 'expo-router';
 
 const Dashboard = () => {
   const { user, loading } = useFindUser();
-  
+  const [userNow, setUserNow] = useState(false)
+
+  useEffect(() => {
+    if (!user) {
+      setUserNow(true)
+    }
+  }, [user])
+
+  useEffect(() => {
+    if (userNow) {
+      router.push('/set-up')
+    }
+  }, [userNow])
+
   return (
       <ScrollView marginTop="$12">
           <DashboardHeader title="Dashboard" />

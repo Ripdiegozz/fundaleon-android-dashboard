@@ -61,7 +61,7 @@ export function SearchDeleteCustomerModal () {
         try {
           const res = await makeRequest.get(`customer/get/identification/${identification}`);
           onClose();
-          return router.push(`/customers/delete/${res.data.data.id}`);
+          return router.push(`/customers/inactive/${res.data.data.id}`);
         } catch (error) {
           console.log(error);
           toast.show({
@@ -149,14 +149,14 @@ export function SearchDeleteCustomerModal () {
           <AlertDialogBackdrop />
           <AlertDialogContent padding='$4'>
             <AlertDialogHeader>
-              <Heading size='lg'>Eliminar un cliente</Heading>
+              <Heading size='lg'>Cambiar Estado</Heading>
               <AlertDialogCloseButton>
                 <Icon as={CloseIcon} size='lg' color='$darkBlue500' lineHeight='$lg' />
               </AlertDialogCloseButton>
             </AlertDialogHeader>
             <AlertDialogBody>
               <Text size='sm'>
-                Ingresa la cédula del cliente que deseas eliminar. Si no la conoces, puedes buscarlo por email.
+                Ingresa la cédula del cliente al que deseas cambiar el estado. Si no la conoces, puedes buscarlo por email.
               </Text>
             </AlertDialogBody>
             <Select paddingVertical='$3' paddingHorizontal='$4' onValueChange={(value) => setInputType(value)} defaultValue={inputType} isDisabled={isLoading}>
@@ -205,7 +205,7 @@ export function SearchDeleteCustomerModal () {
                   onPress={redirectTo}
                   disabled={isLoading}
                   >
-                    <ButtonText>Eliminar</ButtonText>
+                    <ButtonText>Buscar</ButtonText>
                   </Button>
                 </ButtonGroup>
               </AlertDialogFooter>

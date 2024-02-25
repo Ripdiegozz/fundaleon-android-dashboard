@@ -16,10 +16,10 @@ function convertSnakeToCamel(obj: { [key: string]: any }): { [key: string]: any 
 
 // Crear instancia de Axios
 const makeRequest: AxiosInstance = axios.create({
-  baseURL: "http://192.168.1.2:8080/",
+  baseURL: "http://192.168.1.7:8080/",
   headers: {
     "Content-Type": "application/json",
-    "Authorization": '5c77ec46-005f-4d33-9d7c-02df4da32197'
+    "Authorization": 'b4cc4910-36bc-4929-b7c7-351fd5704155'
   },
 });
 

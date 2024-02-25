@@ -107,7 +107,7 @@ export default function CustomerEditView() {
       })
       setTimeout(() => {
         router.push('/customers/customer-list')
-      }, 3000)
+      }, 1200)
     } catch (error) {
       console.log(error)
       toast.show({
